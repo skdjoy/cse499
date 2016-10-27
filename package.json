@@ -1,0 +1,21 @@
+{
+  "name": "tstream",
+  "version": "1.0.0",
+  "description": "A twitter streaming app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sowvik Kanti Das",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongoose": "^4.6.4",
+    "nodemon": "^1.11.0",
+    "ntwitter": "^0.5.0",
+    "socket.io": "^1.5.0",
+    "twitter": "^1.4.0",
+    "twitter-stream-channels": "^1.0.0"
+  }
+}
