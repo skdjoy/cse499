@@ -2,7 +2,7 @@
   console.log("I am in planetbuilder");
   var globe = planetaryjs.planet();
   // Load our custom `autorotate` plugin; see below.
-  globe.loadPlugin(autorotate(20));
+  globe.loadPlugin(autorotate(20));locations:[-180,-90,180,90]
   // The `earth` plugin draws the oceans and the land; it's actually
   // a combination of several separate built-in plugins.
   //

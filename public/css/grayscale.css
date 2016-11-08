@@ -91,7 +91,7 @@ a:focus {
 .navbar-custom .nav li a:active {
   outline: none;
   background-color: transparent;
-}
+}barChart.update();
 .navbar-custom .nav li.active {
   outline: none;
 }
@@ -135,11 +135,9 @@ a:focus {
   display: table-cell;
   vertical-align: middle;
 }
-.intro .intro-body .brand-heading {
-  font-size: 40px;
-}
-.intro .intro-body .intro-text {
-  font-size: 18px;
+
+.intro .intro-body #planet {
+  padding-top: 60px;
 }
 @media (min-width: 768px) {
   .intro {
@@ -156,7 +154,7 @@ a:focus {
 .btn-circle {
   width: 70px;
   height: 70px;
-  margin-top: 15px;
+  margin-top: 10px;
   padding: 7px 16px;
   border: 2px solid white;
   border-radius: 100% !important;
@@ -216,6 +214,9 @@ a:focus {
     -moz-transform: scale(1);
     transform: scale(1);
   }
+}
+#barChart{
+  background-color: white;
 }
 .content-section {
   padding-top: 100px;
