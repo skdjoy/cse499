@@ -1,11 +1,11 @@
 var express = require('express'),
-  mongoose = require('mongoose'),
-  http = require('http'),
-  twitter = require('ntwitter'),
+  //mongoose = require('mongoose'),
+  //http = require('http'),
+  //twitter = require('ntwitter'),
   Twitter = require('twitter'),
   bodyParser = require('body-parser'),
   streamHandler = require('./utils/streamHandler'),
-  TwitterStreamChannels = require('twitter-stream-channels'),
+  //TwitterStreamChannels = require('twitter-stream-channels'),
   config = require('./config');
   streamconfig = require('./streamconfig');
 
@@ -21,11 +21,11 @@ app.use("/", express.static(__dirname + "/public/"));
 
 //var client = new TwitterStreamChannels(config.twitter);
 
-var twit = new twitter(config.twitter);
+//var twit = new twitter(config.twitter);
 var client = new Twitter(config.twitter);
-var tstream = new TwitterStreamChannels(streamconfig.twitter);
+//var tstream = new TwitterStreamChannels(streamconfig.twitter);
 
-var streamHandler_list = [];
+//var streamHandler_list = [];
 
 client.get('trends/place',{id:1}, function(error, tweets, response) {
    console.log(tweets[0].trends.length);
@@ -41,9 +41,10 @@ app.get('/home', function(req,res){
 
 app.post('/home', function(req, res) {
   console.log(req.body.text);
-  streamHandle.streamoff();
-  streamHandle = null;
-  twit.stream('statuses/filter',{track:req.body.text}, function(stream){
+  if(streamHandle!=null){
+    streamHandle.streamoff();
+  }
+  client.stream('statuses/filter',{track:req.body.text}, function(stream){
     streamHandle = new streamHandler(stream,io);
   });
   res.send('Data received');
@@ -52,9 +53,8 @@ app.post('/home', function(req, res) {
 
 
 var server = app.listen(port);
-
+streamHandle = null;
 var io = require('socket.io').listen(server);
-var initial_filter = ['javascript'];
-twit.stream('statuses/filter',{track : initial_filter}, function(stream){
+client.stream('statuses/filter',{track : 'javascript'}, function(stream){
   streamHandle = new streamHandler(stream,io);
 });

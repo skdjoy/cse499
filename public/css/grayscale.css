@@ -58,6 +58,7 @@ a:focus {
   text-transform: uppercase;
   font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
   background-color: black;
+
 }
 .navbar-custom .navbar-toggle {
   color: white;
@@ -124,7 +125,7 @@ a:focus {
   padding: 100px 0;
   text-align: center;
   color: white;
-  background: url(../img/1.jpg) no-repeat bottom center scroll;
+  /*background: url(../img/1.jpg) no-repeat bottom center scroll;*/
   background-color: black;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -312,4 +313,9 @@ img::-moz-selection {
 }
 body {
   webkit-tap-highlight-color: rgba(255, 255, 255, 0.2);
+}
+#planet{
+  height: 400px;
+  width: 100%;
+  margin-bottom: 60px;
 }
