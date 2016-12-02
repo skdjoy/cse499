@@ -349,3 +349,22 @@ body {
   color: skyblue;
   font-style: italic;
 }
+
+.tweetrepeat.ng-move,
+.tweetrepeat.ng-enter,
+.tweetrepeat.ng-leave {
+  -webkit-transition:all linear 0.5s;
+  transition:all linear 0.5s;
+}
+
+.tweetrepeat.ng-leave.ng-leave-active,
+.tweetrepeat.ng-move,
+.tweetrepeat.ng-enter {
+  opacity:0;
+}
+
+.tweetrepeat.ng-leave,
+.tweetrepeat.ng-move.ng-move-active,
+.tweetrepeat.ng-enter.ng-enter-active {
+  opacity:1;
+}

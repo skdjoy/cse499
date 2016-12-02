@@ -1,5 +1,5 @@
 var socket = io.connect();
-var myApp = angular.module('myApp', []);
+var myApp = angular.module('myApp', ['ngAnimate']);
 myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
     //console.log("Hello World from controller");
   var colors = ['red', 'yellow', 'orange', 'green', 'cyan', 'pink','brown','blue','grey'];
@@ -57,19 +57,27 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
   var counter = 0;
   var curSearchWord=null;
   var pauseFlag = 0;
+  var pauselistFlag = 0;
+  var tlistcount=0;
 
-  $scope.refreshlist = function(){
-    $scope.tweetlist=tweets;
-  };
+
 
   var start = function(){socket.on('tweet', function (tweet_data) {
     if(pauseFlag===1){
       return;
     }
-    if(tweets.length<=4){
-      tweets.push(tweet_data);
+    // var lindex= tlistcount % 4;
+    // tweets[lindex]= tweet_data;
+    if(pauselistFlag!=1){
+      if(tweets.length===3){
+        tweets=[];
+        tweets.push(tweet_data);
+        $scope.refreshlist();
+      }else{
+        tweets.push(tweet_data);
+        $scope.refreshlist();
+      }
     }
-
     //console.log(data.body);
     //console.log(data.location.lat);
     //console.log(data.location.lng);
@@ -162,12 +170,24 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
   //   });
   // };
 
+   $scope.refreshlist = function(){
+    $scope.tweetlist=tweets;
+    $scope.$apply();
+  }
+
   $scope.pause =function(){
     pauseFlag=1;
   };
 
   $scope.resume = function(){
     pauseFlag=0;
+  };
+  $scope.pauselist =function(){
+    pauselistFlag=1;
+  };
+
+  $scope.resumelist = function(){
+    pauselistFlag=0;
   };
 
   $http.get('/trends').success(function(response) {
