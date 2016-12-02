@@ -26,35 +26,35 @@ var client = new Twitter(config.twitter);
 //var tstream = new TwitterStreamChannels(streamconfig.twitter);
 
 //var streamHandler_list = [];
+//var stream = null;
 
-client.get('trends/place',{id:1}, function(error, tweets, response) {
-   console.log(tweets[0].trends.length);
-   tweets[0].trends.forEach(function(current_val,index,arr){
-     console.log(current_val.name);
-   });
-});
 
 app.get('/home', function(req,res){
   res.send('This is the home page');
 });
 
+app.get('/trends', function(req, res) {
+  client.get('trends/place',{id:1}, function(error, tweets, response) {
+    //console.log(tweets[0].trends);
+    res.send(tweets[0].trends);
+  });
+});
 
-app.post('/home', function(req, res) {
+
+app.post('/search', function(req, res) {
   console.log(req.body.text);
   if(streamHandle!=null){
     streamHandle.streamoff();
   }
-  client.stream('statuses/filter',{track:req.body.text}, function(stream){
-    streamHandle = new streamHandler(stream,io);
-  });
+  client.currentStream = client.stream('statuses/filter', {track:req.body.text});
+  streamHandle = new streamHandler(client.currentStream,io);
   res.send('Data received');
 });
-
 
 
 var server = app.listen(port);
 streamHandle = null;
 var io = require('socket.io').listen(server);
-client.stream('statuses/filter',{track : 'javascript'}, function(stream){
-  streamHandle = new streamHandler(stream,io);
-});
+// client.stream('statuses/filter',{track : 'javascript'}, function(stream){
+//   streamHandle = new streamHandler(stream,io);
+// });

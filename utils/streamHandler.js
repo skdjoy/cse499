@@ -18,7 +18,8 @@ var nominatim = require('nominatim');
 module.exports = function(stream, io){
 
   // When tweets get sent our way ...
-  stream.on('data', function(data) {
+
+  function processAndSend(data) {
     //console.log(data);
     if (data['user'] !== undefined && data['user']['location']!== null) {
 
@@ -33,7 +34,7 @@ module.exports = function(stream, io){
             twid: data['id_str'],
             active: false,
             author: data['user']['name'],
-            avatar: data['user']['profile_imaerge_url'],
+            avatar: data['user']['profile_image_url'],
             body: data['text'],
             lat: latitude,
             lng: longitude,
@@ -45,37 +46,27 @@ module.exports = function(stream, io){
           io.emit('tweet', tweet);
         }
       });
-
-
-
-      // Create a new model instance with our object
-      /*
-      var tweetEntry = new Tweet(tweet);
-
-      // Save the tweet to the database
-      tweetEntry.save(function(err) {
-        if (!err) {
-          // If everything is cool, socket.io emits the tweet.
-          io.emit('tweet', tweet);
-        }
-      });
-      */
-
     }
-  });
+  }
+  stream.on('data', processAndSend);
+
   this.streamoff = function(){
     stream.destroy();
   };
+
   stream.on('end', function (response) {
     console.log('stream has disconnected!');
   });
+
   stream.on('error', function (response) {
     console.log('error while stream!');
     console.log(response);
     // console.log('trying to reconnect...');
     // stream.reconnect;
   });
+
   stream.on('destroy', function (response) {
     console.log('stream has been destroyed!');
   });
+
 };

@@ -92,7 +92,7 @@ a:focus {
 .navbar-custom .nav li a:active {
   outline: none;
   background-color: transparent;
-}barChart.update();
+}
 .navbar-custom .nav li.active {
   outline: none;
 }
@@ -315,7 +315,37 @@ body {
   webkit-tap-highlight-color: rgba(255, 255, 255, 0.2);
 }
 #planet{
+  /*padding-top: 200px;*/
   height: 400px;
   width: 100%;
   margin-bottom: 60px;
+}
+.atweet{
+  border: 2px solid grey;
+  background-color: white;
+  margin-bottom: 1%;
+  margin-top: 1%;
+}
+.atweet img{
+  width: 50px;
+  height: 50px;
+  float: left;
+}
+.atweet p {
+  margin:0px;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: left;
+  padding-left: 12%;
+}
+.tweetbody{
+  color: grey;
+}
+.tweetname {
+  color: black;
+  font-weight: bolder;
+}
+.tweetdate {
+  color: skyblue;
+  font-style: italic;
 }

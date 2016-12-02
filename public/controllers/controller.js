@@ -8,10 +8,9 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
     labels: [],
     datasets: [
         {
-            label: "Tweet count by location",
             backgroundColor: [],
             borderColor: [],
-            borderWidth: 1,
+            borderWidth: 2,
             data: [],
         }
     ]
@@ -23,7 +22,10 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
     options:{
       scales: { xAxes: [{ gridLines: { show: true, color: "white", } }],
         yAxes: [{ gridLines: { show: true, color: "white", } }]
-     }
+      },
+      legend:{
+        display: false
+      }
     }
   });
 
@@ -43,71 +45,85 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
   //   var lat = Math.random() * 170 - 85;
   //   var lng = Math.random() * 360 - 180;
   //   addGlobePoints(lat,lng,3);
-  // }, 100);
+  // }, 100);dGlobePoints(tweet_data.lat,tweet_data.lng,latlng_count[latlng]);
 
 // On tweet event emission...
-  var tweets = [];
+  var tweets=[];
+  var tweets_index=0;
   var location_tweet_count_array = new Object();
   var location_tweet_index_array = new Object();
   var latlng_count = new Object();
   var latlng;
   var counter = 0;
+  var curSearchWord=null;
+  var pauseFlag = 0;
+
+  $scope.refreshlist = function(){
+    $scope.tweetlist=tweets;
+  };
 
   var start = function(){socket.on('tweet', function (tweet_data) {
-        //tweets.push(data);
-        //console.log(data.body);
-        //console.log(data.location.lat);
-        //console.log(data.location.lng);
-        var color = colors[Math.floor(Math.random() * colors.length)];
-        // globe.plugins.pings.add(tweet_data.lng, tweet_data.lat, { color: color, ttl: 4000, angle: 10 });
-        //console.log(tweet_data.location_name in location_tweet_count_array);
-        if(tweet_data.location_name in location_tweet_count_array){
-          loc = tweet_data.location_name;
-          //console.log("found same location");
-          location_tweet_count_array[loc]++;
-          index = location_tweet_index_array[loc];
-          barChart.data.datasets[0].data[index]++;
-          //addGlobePoints(tweet_data.lat,tweet_data.lng,location_tweet_count_array[loc]);
-        }
-        else{
-          loc = tweet_data.location_name;
-          location_tweet_count_array[loc] = 1;
-          location_tweet_index_array[loc] = counter;
-          barChart.data.datasets[0].backgroundColor.push(color);
-          //color = colors[Math.floor(Math.random() * colors.length)];
-          barChart.data.datasets[0].borderColor.push(color);
-          barChart.data.labels.push(loc);
-          barChart.data.datasets[0].data.push(location_tweet_count_array[loc]);
-          counter++;
-          //addGlobePoints(tweet_data.lat,tweet_data.lng,location_tweet_count_array[loc]);
-        }
+    if(pauseFlag===1){
+      return;
+    }
+    if(tweets.length<=4){
+      tweets.push(tweet_data);
+    }
 
-        latlng = tweet_data.lat.toString()+tweet_data.lng.toString();
-        if(latlng in latlng_count){
-          latlng_count[latlng]++;
-        }else{
-          latlng_count[latlng]=1;
-        }
-        addGlobePoints(tweet_data.lat,tweet_data.lng,latlng_count[latlng]);
-        //console.log(latlng_count);
+    //console.log(data.body);
+    //console.log(data.location.lat);
+    //console.log(data.location.lng);
+    var color = colors[Math.floor(Math.random() * colors.length)];
+    // globe.plugins.pings.add(tweet_data.lng, tweet_data.lat, { color: color, ttl: 4000, angle: 10 });
+    //console.log(tweet_data.location_name in location_tweet_count_array);
+    if(tweet_data.location_name in location_tweet_count_array){
+      loc = tweet_data.location_name;
+      //console.log("found same location");
+      location_tweet_count_array[loc]++;
+      index = location_tweet_index_array[loc];
+      barChart.data.datasets[0].data[index]++;
+      //addGlobePoints(tweet_data.lat,tweet_data.lng,location_tweet_count_array[loc]);
+    }
+    else{
+      loc = tweet_data.location_name;
+      location_tweet_count_array[loc] = 1;
+      location_tweet_index_array[loc] = counter;
+      barChart.data.datasets[0].backgroundColor.push(color);
+      //color = colors[Math.floor(Math.random() * colors.length)];
+      barChart.data.datasets[0].borderColor.push(color);
+      barChart.data.labels.push(loc);
+      barChart.data.datasets[0].data.push(location_tweet_count_array[loc]);
+      counter++;
+      //addGlobePoints(tweet_data.lat,tweet_data.lng,location_tweet_count_array[loc]);
+    }
 
-        //console.log(location_tweet_count_array);
-        // for (location in location_tweet_count_array){
-        //   console.log(location);
-        //   console.log(location_tweet_count_array[location]);
-        //   //lineChart.data.labels.push(location.toString());
-        //   //lineChart.data.datasets[0].data.push(location_tweet_count_array[location]);
-        // }
-        barChart.update();
-        //refresh_tweets_list(tweets);
-      }
-    );
+    latlng = tweet_data.lat.toString()+tweet_data.lng.toString();
+    if(latlng in latlng_count){
+      latlng_count[latlng]++;
+    }else{
+      latlng_count[latlng]=1;
+    }
+    addGlobePoints(tweet_data.lat,tweet_data.lng,latlng_count[latlng]);
+    //console.log(latlng_count);
+
+    //console.log(location_tweet_count_array);
+    // for (location in location_tweet_count_array){
+    //   console.log(location);
+    //   console.log(location_tweet_count_array[location]);
+    //   //lineChart.data.labels.push(location.toString());
+    //   //lineChart.data.datasets[0].data.push(location_tweet_count_array[location]);
+    // }
+    barChart.update();
+    //refresh_tweets_list(tweets);
+
+    });
   };
 
 
 
   $scope.search = function(){
-    $http.post('/home', $scope.s).success(function(response) {
+    curSearchWord = $scope.s;
+    $http.post('/search', $scope.s).success(function(response) {
       // if(barChart!=null){
       //   barChart.destroy();
       // }
@@ -115,7 +131,6 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
         labels: [],
         datasets: [
             {
-                label: "Tweet count by location",
                 backgroundColor: [],
                 borderColor: [],
                 borderWidth: 1,
@@ -136,6 +151,7 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
       clearGlobePoints();
       console.log(response);
     });
+    //document.getElementById("page-top").scrollIntoView();
   };
 
 
@@ -147,10 +163,16 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
   // };
 
   $scope.pause =function(){
-
+    pauseFlag=1;
   };
 
+  $scope.resume = function(){
+    pauseFlag=0;
+  };
+
+  $http.get('/trends').success(function(response) {
+    getCirclePack(response);
+  });
+
   start();
-
-
 }]);﻿
