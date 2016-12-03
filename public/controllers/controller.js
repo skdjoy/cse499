@@ -48,6 +48,7 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
   // }, 100);dGlobePoints(tweet_data.lat,tweet_data.lng,latlng_count[latlng]);
 
 // On tweet event emission...
+  $scope.footertext="You are not searching anything right now."
   var tweets=[];
   var tweets_index=0;
   var location_tweet_count_array = new Object();
@@ -59,6 +60,7 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
   var pauseFlag = 0;
   var pauselistFlag = 0;
   var tlistcount=0;
+
 
 
 
@@ -158,6 +160,7 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
       latlng_count = new Object();
       clearGlobePoints();
       console.log(response);
+      $scope.footertext="Current Stream: "+$scope.s.text;
     });
     //document.getElementById("page-top").scrollIntoView();
   };
@@ -177,10 +180,12 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 
   $scope.pause =function(){
     pauseFlag=1;
+    $scope.footertext="Current Stream is paused";
   };
 
   $scope.resume = function(){
     pauseFlag=0;
+    $scope.footertext="Current Stream is resumed.";
   };
   $scope.pauselist =function(){
     pauselistFlag=1;

@@ -290,10 +290,18 @@ ul.banner-social-buttons {
   }
 }
 footer {
-  padding: 50px 0;
+  padding: 10px 0;
+  position: fixed;
+  background-color: black;
+  width:100%;
+  bottom: 0;
+  opacity: 0.8;
 }
 footer p {
   margin: 0;
+  font-size: 12px;
+  line-height: 1;
+  text-align: left;
 }
 ::-moz-selection {
   text-shadow: none;
