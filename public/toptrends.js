@@ -60,7 +60,4 @@ getCirclePack = function(data){
     .on("mouseover", function(d){d3.select(this).attr("stroke-width",5).attr("opacity",1);return tooltip.style("visibility", "visible").text(d.name);})
 	  .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
 	  .on("mouseout", function(){d3.select(this).attr("stroke-width",2).attr("opacity",0.25);return tooltip.style("visibility", "hidden");});
-
-
-
 };

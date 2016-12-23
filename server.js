@@ -1,13 +1,8 @@
 var express = require('express'),
-  //mongoose = require('mongoose'),
-  //http = require('http'),
-  //twitter = require('ntwitter'),
   Twitter = require('twitter'),
   bodyParser = require('body-parser'),
   streamHandler = require('./utils/streamHandler'),
-  //TwitterStreamChannels = require('twitter-stream-channels'),
   config = require('./config');
-  streamconfig = require('./streamconfig');
 
 
 var app = express();
@@ -17,16 +12,8 @@ app.use(bodyParser.json());
 
 app.use("/", express.static(__dirname + "/public/"));
 
-//mongoose.connect('mongodb://localhost/stream-tweets');
-
-//var client = new TwitterStreamChannels(config.twitter);
-
-//var twit = new twitter(config.twitter);
 var client = new Twitter(config.twitter);
-//var tstream = new TwitterStreamChannels(streamconfig.twitter);
 
-//var streamHandler_list = [];
-//var stream = null;
 
 
 app.get('/home', function(req,res){
@@ -55,6 +42,3 @@ app.post('/search', function(req, res) {
 var server = app.listen(port);
 streamHandle = null;
 var io = require('socket.io').listen(server);
-// client.stream('statuses/filter',{track : 'javascript'}, function(stream){
-//   streamHandle = new streamHandler(stream,io);
-// });
